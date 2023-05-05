@@ -41,6 +41,14 @@ and navigate to the webpage http://localhost:3000/
 
 ---
 
+works up to here
+
+everything below is random notes
+
+does not work
+
+---
+
 
 Then
 

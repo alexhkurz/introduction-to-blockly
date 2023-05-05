@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Blockly Example</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  </head>
+  <body>
+    <div id="blocklyDiv"></div>
+    <script>
+      const workspace = Blockly.inject('blocklyDiv', {toolbox: null});
+
+      const code = `
+        const express = require('express');
+        const app = express();
+
+        app.get('/', (req, res) => {
+          res.send('Hello, World!');
+        });
+
+        app.listen(3000, () => {
+          console.log('Server listening on port 3000');
+        });
+      `;
+
+      const xml = Blockly.Xml.textToDom('<xml></xml>');
+      const block = Blockly.Xml.domToBlock(xml, workspace);
+
+      block.setFieldValue(code, 'CODE');
+
+      function runCode() {
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        eval(code);
+      }
+    </script>
+    <button onclick="runCode()">Run code</button>
+  </body>
+</html>
