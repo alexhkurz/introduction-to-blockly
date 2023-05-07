@@ -10,7 +10,7 @@
     <script>
       const workspace = Blockly.inject('blocklyDiv', {toolbox: null});
 
-      const code = `
+      const code_test = `
         const express = require('express');
         const app = express();
 
@@ -23,6 +23,7 @@
         });
       `;
 
+
       const xml = Blockly.Xml.textToDom('<xml></xml>');
       const block = Blockly.Xml.domToBlock(xml, workspace);
 
@@ -30,7 +31,7 @@
 
       function runCode() {
         const code = Blockly.JavaScript.workspaceToCode(workspace);
-        eval(code);
+        eval(code2);
       }
     </script>
     <button onclick="runCode()">Run code</button>

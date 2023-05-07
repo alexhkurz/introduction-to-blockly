@@ -22,9 +22,11 @@ Create a file `helloWorld.js` that contains
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+app.use(express.static('public')); // Exposes all files in /public to the client via the URL
+
+// app.get('/', (req, res) => {
+//   res.send('Hello, World!');
+// });
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
@@ -34,10 +36,30 @@ app.listen(3000, () => {
 Now start a server on localhost with
 
 ```
-node helloWorld.js
+nodemon helloWorld.js
 ```
 
-and navigate to the webpage http://localhost:3000/
+Alternatively, it's best practice with Node applications to utilize the `scripts` section within `package.json`
+
+`npm run dev`
+
+You can run `npm run <script entry>`, where `<script entry>` is an entry in the scripts section, such as the below:
+
+```json
+"scripts": {
+  "dev": "nodemon helloWorld.js"
+},
+```
+
+Nodemon restarts the server when it detects changes in files
+
+You can now navigate to any `.html` file in `/public`, such as  `http://localhost:3000/index.html`
+
+### Blockly Resources
+
+Interesting tool for creating custom blocks
+
+[Blockly Dev Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
 
 ---
 

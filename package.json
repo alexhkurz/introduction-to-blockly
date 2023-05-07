@@ -4,12 +4,15 @@
   "description": "introduction to blockly",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon helloWorld.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "blockly": "^9.3.3",
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
