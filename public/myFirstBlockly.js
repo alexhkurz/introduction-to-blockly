@@ -20,6 +20,14 @@ Blockly.defineBlocksWithJsonArray([{
     "tooltip": "Returns number of letters in the provided text.",
     "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
 }]);
+
+Blockly.defineBlocksWithJsonArray([{
+    "type": "myString",
+    "message0": 'Hello My Friend',
+    "output": "String",
+    "colour": 360,
+}]);
+
 Blockly.defineBlocksWithJsonArray([{
     "type": "econ_action",
     "message0": "%1 %2 %3 %4",
@@ -71,6 +79,10 @@ const toolbox = {
         {
             "kind": "block",
             "type": "econ_action"
+        },
+        {
+            "kind": "block",
+            "type": "myString"
         },
     ]
 }
