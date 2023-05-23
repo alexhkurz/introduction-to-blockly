@@ -9,11 +9,16 @@
 </head>
 
 <body>
-  <h1 id="message"></h1>
-
-  <div style="width: 100%; height: 100%; background-color: rgb(197, 197, 197);">
-    <button onclick="runCode()">Run code</button>
-    <div id="blocklyDiv" style="height: 600px; width: 1280px;"></div>
+  <div>
+    <div
+      style="display: flex; flex-direction: column; gap: 5px; width: 100%; height: 100%; background-color: rgb(197, 197, 197); padding: 5px;">
+      <div id="blocklyDiv" style="height: 600px; width: 1280px;"></div>
+      <div>
+        <h3>JavaScript Code</h3>
+        <button onclick="runCode()">Run code</button>
+        <div id="codeDisplay"></div>
+      </div>
+    </div>
   </div>
 </body>
 
