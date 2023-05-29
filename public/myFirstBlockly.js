@@ -1,3 +1,8 @@
+// variables of the economy
+var index_donor = 0;
+var index_recipient = 0;
+var action = 3;
+
 // Useful tool for creating custom blocks:
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#json
@@ -37,8 +42,15 @@ Blockly.defineBlocksWithJsonArray([
         "colour": 120,
     },
     {
+        "type": "action_const",
+        "message0": 'Action', // Must reference all args below using %n notation
+        // Built-in field types - https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/overview
+        "output": "Number", // Return type
+        "colour": 120,
+    },
+    {
         "type": "updateIndexDonor",
-        "message0": 'Update Donor Index %1', // Must reference all args below using %n notation
+        "message0": 'Update Donor Index by %1', // Must reference all args below using %n notation
         "args0": [
             {
                 "type": "input_value", // Input implies another block will be plugged into here
@@ -50,7 +62,7 @@ Blockly.defineBlocksWithJsonArray([
     },
     {
         "type": "updateIndexRecipient",
-        "message0": 'Update Recipient Index %1', // Must reference all args below using %n notation
+        "message0": 'Update Recipient Index by %1', // Must reference all args below using %n notation
         "args0": [
             {
                 "type": "input_value",
@@ -82,6 +94,14 @@ Blockly.JavaScript['action'] = function (block) {
     // Fetch value of a 'field' or argument of the block. Defined in "arg0" children
     var text_value = block.getFieldValue('NUM');
     return [text_value, Blockly.JavaScript.ORDER_ATOMIC];
+    // Must include Blockly order for operation precedence
+    // See https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence
+};
+
+Blockly.JavaScript['action_const'] = function (block) {
+    // Fetch value of a 'field' or argument of the block. Defined in "arg0" children
+    var value = action;
+    return [value, Blockly.JavaScript.ORDER_ATOMIC];
     // Must include Blockly order for operation precedence
     // See https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence
 };
@@ -127,6 +147,10 @@ const toolbox = {
         },
         {
             "kind": "block",
+            "type": "action_const"
+        },
+        {
+            "kind": "block",
             "type": "updateIndexDonor"
         },
         {
@@ -139,9 +163,6 @@ const toolbox = {
         },
     ]
 }
-
-var index_donor = 0;
-var index_recipient = 0;
 
 const workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
 
