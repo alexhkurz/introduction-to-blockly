@@ -1,60 +1,141 @@
-// const xml = Blockly.Xml.textToDom('<xml><block type="text_print"><value name="TEXT"><block type="text" ><field name="TEXT">Hello, World!</field></block></value></block></xml>');
-// const block = Blockly.Xml.domToBlock(xml, workspace);
-
-
-
-// Define a custom block
-// https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#json
-Blockly.defineBlocksWithJsonArray([{
-    "type": "string_length",
-    "message0": 'length of %1',
-    "args0": [
-        {
-            "type": "input_value",
-            "name": "VALUE",
-            "check": "String"
-        }
-    ],
-    "output": "Number",
-    "colour": 160,
-    "tooltip": "Returns number of letters in the provided text.",
-    "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
-}]);
-Blockly.defineBlocksWithJsonArray([{
-    "type": "econ_action",
-    "message0": "%1 %2 %3 %4",
-    "args0": [
-        {
-            "type": "field_image",
-            "src": "https://www.gstatic.com/codesite/ph/images/star_on.gif",
-            "width": 15,
-            "height": 15,
-            "alt": "*",
-            "flipRtl": false
-        },
-        {
-            "type": "field_number",
-            "name": "NAME",
-            "value": 0,
-            "min": 0,
-            "max": 6
-        },
-        {
-            "type": "input_value",
-            "name": "NAME",
-            "check": "Number"
-        },
-        {
-            "type": "input_dummy"
-        }
-    ],
-    "colour": 260,
-    "tooltip": "Some cool block",
-    "helpUrl": ""
-}]);
+// variables of the economy
+var index_donor = 0;
+var index_recipient = 0;
+var action = 3;
 
 // Useful tool for creating custom blocks:
 // https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
+// https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks#json
+
+// defineBlocksWithJsonArray takes an array of json objects of blocks
+Blockly.defineBlocksWithJsonArray([
+    {
+        "type": "string_length",
+        "message0": 'length of %1',
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "VALUE",
+                "check": "String"
+            }
+        ],
+        "output": "Number",
+        "colour": 160,
+        "tooltip": "Returns number of letters in the provided text.",
+        "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
+    },
+    {
+        "type": "action",
+        "message0": 'Action: %1', // Must reference all args below using %n notation
+        // Built-in field types - https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/overview
+        "args0": [
+            {
+                "type": "field_number", // Field implies a raw input into that block's 'field'
+                "name": "NUM", // Use this in block.getFieldValue
+                "value": 3,
+                "min": 0,
+                "max": 6,
+                // "precision": 10
+            }
+        ],
+        "output": "Number", // Return type
+        "colour": 120,
+    },
+    {
+        "type": "action_const",
+        "message0": 'Action', // Must reference all args below using %n notation
+        // Built-in field types - https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/overview
+        "output": "Number", // Return type
+        "colour": 120,
+    },
+    {
+        "type": "updateIndexDonor",
+        "message0": 'Update Donor Index by %1', // Must reference all args below using %n notation
+        "args0": [
+            {
+                "type": "input_value", // Input implies another block will be plugged into here
+                "name": "INPUT_VAL",
+            }
+        ],
+        "output": "String", // String output expected to be able to output code
+        "colour": 210,
+    },
+    {
+        "type": "updateIndexRecipient",
+        "message0": 'Update Recipient Index by %1', // Must reference all args below using %n notation
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "INPUT_VAL",
+            }
+        ],
+        "output": "String",
+        "colour": 210,
+    },
+    {
+        "type": "negate",
+        "message0": '- %1', // Must reference all args below using %n notation
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "NUM",
+                "check": "Number"
+            }
+        ],
+        "output": "Number",
+        "colour": 360,
+    },
+]);
+
+// Define the javascript returned from a specific block type
+// Code return definition
+
+Blockly.JavaScript['action'] = function (block) {
+    // Fetch value of a 'field' or argument of the block. Defined in "arg0" children
+    var text_value = block.getFieldValue('NUM');
+    return [text_value, Blockly.JavaScript.ORDER_ATOMIC];
+    // Must include Blockly order for operation precedence
+    // See https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence
+};
+
+Blockly.JavaScript['action_const'] = function (block) {
+    // Fetch value of a 'field' or argument of the block. Defined in "arg0" children
+    var value = action;
+    return [value, Blockly.JavaScript.ORDER_ATOMIC];
+    // Must include Blockly order for operation precedence
+    // See https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence
+};
+
+Blockly.JavaScript['updateIndexDonor'] = function (block) {
+    var val = Blockly.JavaScript.valueToCode(block, 'INPUT_VAL', Blockly.JavaScript.ORDER_ATOMIC);
+    var code = `index_donor += ${val}`;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['updateIndexRecipient'] = function (block) {
+    var val = Blockly.JavaScript.valueToCode(block, 'INPUT_VAL', Blockly.JavaScript.ORDER_ATOMIC);
+    var code = `index_recipient += ${val}`;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['negate'] = function (block) {
+    var val = Blockly.JavaScript.valueToCode(block, 'NUM', Blockly.JavaScript.ORDER_ATOMIC);
+    var code = `-${val}`
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['string_length'] = function (block) {
+    // Fetch value of a 'field' or argument of the block. Defined in "arg0" children
+    // Value to code returns a 'code' type of that field, in this case a literal string
+    // value_string will hold 'Static String Value!'
+    var value_string = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+    var code = value_string + '.length'
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+    // Must include Blockly order for operation precedence
+    // See https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence
+};
+
+// List of pre-defined blocks - https://github.com/google/blockly/blob/master/blocks/
 
 // Define a custom toolbox
 const toolbox = {
@@ -62,31 +143,40 @@ const toolbox = {
     "contents": [
         {
             "kind": "block",
-            "type": "text_print"
+            "type": "action"
         },
         {
             "kind": "block",
-            "type": "string_length"
+            "type": "action_const"
         },
         {
             "kind": "block",
-            "type": "econ_action"
+            "type": "updateIndexDonor"
+        },
+        {
+            "kind": "block",
+            "type": "updateIndexRecipient"
+        },
+        {
+            "kind": "block",
+            "type": "negate"
         },
     ]
 }
 
-
 const workspace = Blockly.inject('blocklyDiv', { toolbox: toolbox });
+
+function updateCode(e) {
+    const code = Blockly.JavaScript.workspaceToCode(workspace);
+    document.querySelector('#codeDisplay').innerHTML = code;
+    document.querySelector('#indexDonor').innerHTML = index_donor;
+    document.querySelector('#indexRecipient').innerHTML = index_recipient;
+}
+
+workspace.addChangeListener(updateCode);
 
 function runCode() {
     const code = Blockly.JavaScript.workspaceToCode(workspace);
     eval(code);
+    updateCode();
 }
-
-// Not sure why you'd do this?
-// fetch('http://localhost:3000')
-//     .then(response => response.text())
-//     .then(message => {
-//         const messageElement = document.getElementById('message');
-//         messageElement.innerText = message;
-//     });
